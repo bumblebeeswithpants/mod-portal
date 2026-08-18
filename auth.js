@@ -1,4 +1,5 @@
-const PORTAL_SESSION_KEY = "modPortalSessionToken";
+const PORTAL_SESSION_KEY =
+  "modPortalSessionToken";
 
 document.body.style.visibility =
   "hidden";
@@ -22,27 +23,34 @@ async function portalRequest(
   const apiUrl =
     window.PORTAL_CONFIG?.API_URL;
 
-  if (!apiUrl) {
+  if (
+    !apiUrl ||
+    apiUrl.includes(
+      "PASTE_YOUR"
+    )
+  ) {
     throw new Error(
       "Backend URL is missing."
     );
   }
 
-  const response = await fetch(
-    apiUrl,
-    {
-      method: "POST",
-      redirect: "follow",
-      headers: {
-        "Content-Type":
-          "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify({
-        action,
-        ...payload
-      })
-    }
-  );
+  const response =
+    await fetch(
+      apiUrl,
+      {
+        method: "POST",
+        redirect: "follow",
+        headers: {
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+        body:
+          JSON.stringify({
+            action,
+            ...payload
+          })
+      }
+    );
 
   const text =
     await response.text();
@@ -50,7 +58,10 @@ async function portalRequest(
   let data;
 
   try {
-    data = JSON.parse(text);
+    data =
+      JSON.parse(
+        text
+      );
   } catch {
     throw new Error(
       "The backend returned an invalid response."
@@ -73,7 +84,27 @@ async function portalRequest(
   return data;
 }
 
-function saveAuthenticatedUser(user) {
+function getAuthInitials(
+  name
+) {
+  return String(
+    name || ""
+  )
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(
+      part =>
+        part.charAt(0)
+    )
+    .join("")
+    .toUpperCase() ||
+    "MP";
+}
+
+function saveAuthenticatedUser(
+  user
+) {
   let state = {};
 
   try {
@@ -88,56 +119,62 @@ function saveAuthenticatedUser(user) {
   }
 
   state.currentUser = {
-    id: user.id,
+    id:
+      user.id,
+
     username:
       user.username,
-    email:
-      user.email,
+
     displayName:
       user.displayName,
+
     initials:
       getAuthInitials(
         user.displayName
       ),
+
     role:
       user.role,
+
     clearance:
       Number(
         user.clearance
       ),
+
     status:
       user.status,
+
     mentor:
-      user.mentorId || "",
+      user.mentorId ||
+      "",
+
     mentorId:
-      user.mentorId || "",
+      user.mentorId ||
+      "",
+
     forcePasswordReset:
       Boolean(
         user.forcePasswordReset
       ),
+
     description:
-      user.description || "",
+      user.description ||
+      "",
+
     lastLogin:
-      user.lastLogin || ""
+      user.lastLogin ||
+      "",
+
+    grade:
+      null
   };
 
   localStorage.setItem(
     "modPortalState",
-    JSON.stringify(state)
-  );
-}
-
-function getAuthInitials(name) {
-  return String(name || "")
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map(
-      part =>
-        part.charAt(0)
+    JSON.stringify(
+      state
     )
-    .join("")
-    .toUpperCase() || "MP";
+  );
 }
 
 function redirectToLogin() {
@@ -156,7 +193,9 @@ async function logoutPortal() {
     if (token) {
       await portalRequest(
         "logout",
-        { token }
+        {
+          token
+        }
       );
     }
   } catch {}
@@ -166,7 +205,10 @@ async function logoutPortal() {
 
 function loadPortalScript() {
   return new Promise(
-    (resolve, reject) => {
+    (
+      resolve,
+      reject
+    ) => {
       const script =
         document.createElement(
           "script"
@@ -181,8 +223,9 @@ function loadPortalScript() {
       script.onerror =
         reject;
 
-      document.body
-        .appendChild(script);
+      document.body.appendChild(
+        script
+      );
     }
   );
 }
@@ -218,7 +261,9 @@ window.portalApi =
         error.code ===
           "AUTH_REQUIRED" ||
         error.code ===
-          "ACCOUNT_INACTIVE"
+          "ACCOUNT_INACTIVE" ||
+        error.code ===
+          "ACCOUNT_SUSPENDED"
       ) {
         redirectToLogin();
         return;
@@ -265,7 +310,9 @@ async function initializePortalAuth() {
     const data =
       await portalRequest(
         "session",
-        { token }
+        {
+          token
+        }
       );
 
     window.PORTAL_AUTH =
