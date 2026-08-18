@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mod Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+<main class="login-shell">
+<section class="login-card">
+<div class="login-brand">MOD PORTAL</div>
+<h1>Staff sign in</h1>
+<p class="muted">Use your portal username and password.</p>
+<form class="login-form" id="loginForm">
+<div class="form-grid">
+<label class="field">Username<input id="username" name="username" autocomplete="username" required></label>
+<label class="field">Password<input id="password" name="password" type="password" autocomplete="current-password" required></label>
+</div>
+<div id="loginError" class="alert error" hidden></div>
+<button class="btn primary login-submit" type="submit">Sign In</button>
+</form>
+<button class="text-button" id="showRequestAccess" type="button">Request Access</button>
+</section>
+<section class="login-card" id="requestAccessCard" hidden>
+<div class="login-brand">NEW ACCOUNT</div>
+<h2>Request access</h2>
+<form id="requestAccessForm">
+<div class="form-grid">
+<label class="field">Username<input id="requestUsername" autocomplete="username" required></label>
+<label class="field">Display name<input id="requestDisplayName" required></label>
+<label class="field">Password<input id="requestPassword" type="password" autocomplete="new-password" minlength="10" required></label>
+</div>
+<div id="requestAccessMessage" class="alert" hidden></div>
+<div class="button-row">
+<button class="btn primary" type="submit">Submit Request</button>
+<button class="btn" id="cancelRequestAccess" type="button">Cancel</button>
+</div>
+</form>
+</section>
+</main>
+<script src="config.js"></script>
+<script src="login.js"></script>
+</body>
+</html>

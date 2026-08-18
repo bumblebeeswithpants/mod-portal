@@ -1,0 +1,3 @@
+window.PORTAL_CONFIG = Object.freeze({
+  API_URL: "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE"
+});
