@@ -1,30 +1,41 @@
-const PORTAL_SESSION_KEY = "modPortalSessionToken";
+const PORTAL_SESSION_KEY =
+  "modPortalSessionToken";
 
-async function loginApi(action, payload = {}) {
+async function loginApi(
+  action,
+  payload = {}
+) {
   const apiUrl =
     window.PORTAL_CONFIG?.API_URL;
 
-  if (!apiUrl) {
+  if (
+    !apiUrl ||
+    apiUrl.includes(
+      "PASTE_YOUR"
+    )
+  ) {
     throw new Error(
       "Backend URL is missing."
     );
   }
 
-  const response = await fetch(
-    apiUrl,
-    {
-      method: "POST",
-      redirect: "follow",
-      headers: {
-        "Content-Type":
-          "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify({
-        action,
-        ...payload
-      })
-    }
-  );
+  const response =
+    await fetch(
+      apiUrl,
+      {
+        method: "POST",
+        redirect: "follow",
+        headers: {
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+        body:
+          JSON.stringify({
+            action,
+            ...payload
+          })
+      }
+    );
 
   const text =
     await response.text();
@@ -32,7 +43,10 @@ async function loginApi(action, payload = {}) {
   let data;
 
   try {
-    data = JSON.parse(text);
+    data =
+      JSON.parse(
+        text
+      );
   } catch {
     throw new Error(
       "The backend returned an invalid response."
@@ -96,12 +110,16 @@ function getLoginErrorElement() {
       ".login-form"
     );
 
-  form?.prepend(element);
+  form?.prepend(
+    element
+  );
 
   return element;
 }
 
-function showLoginError(message) {
+function showLoginError(
+  message
+) {
   const element =
     getLoginErrorElement();
 
@@ -116,7 +134,9 @@ function clearLoginError() {
   const element =
     getLoginErrorElement();
 
-  element.textContent = "";
+  element.textContent =
+    "";
+
   element.style.display =
     "none";
 }
@@ -147,7 +167,9 @@ async function checkExistingSession() {
   try {
     await loginApi(
       "session",
-      { token }
+      {
+        token
+      }
     );
 
     window.location.replace(
@@ -159,27 +181,37 @@ async function checkExistingSession() {
   }
 }
 
-async function handleLogin(event) {
+async function handleLogin(
+  event
+) {
   event.preventDefault();
 
   clearLoginError();
 
   const username =
-    document.getElementById(
-      "username"
-    )?.value.trim();
+    document
+      .getElementById(
+        "username"
+      )
+      ?.value
+      .trim();
 
   const password =
-    document.getElementById(
-      "password"
-    )?.value;
+    document
+      .getElementById(
+        "password"
+      )
+      ?.value;
 
   const button =
     document.querySelector(
       ".login-submit"
     );
 
-  if (!username || !password) {
+  if (
+    !username ||
+    !password
+  ) {
     showLoginError(
       "Enter your username and password."
     );
@@ -192,7 +224,9 @@ async function handleLogin(event) {
     "Sign In";
 
   if (button) {
-    button.disabled = true;
+    button.disabled =
+      true;
+
     button.textContent =
       "Signing In...";
   }
@@ -207,7 +241,9 @@ async function handleLogin(event) {
         }
       );
 
-    saveSession(data);
+    saveSession(
+      data
+    );
 
     window.location.replace(
       "portal.html"
@@ -220,20 +256,29 @@ async function handleLogin(event) {
     );
 
     if (button) {
-      button.disabled = false;
+      button.disabled =
+        false;
+
       button.textContent =
         originalText;
     }
   }
 }
 
-document
-  .querySelector(
+const loginForm =
+  document.querySelector(
     ".login-form"
-  )
-  ?.addEventListener(
+  );
+
+if (loginForm) {
+  loginForm.removeAttribute(
+    "action"
+  );
+
+  loginForm.addEventListener(
     "submit",
     handleLogin
   );
+}
 
 checkExistingSession();
