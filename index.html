@@ -1,1702 +1,331 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-density="comfortable">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mod Portal">
   <title>Mod Portal</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .login-page {
+      display: grid;
+      min-height: 100vh;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      background: var(--bg);
+    }
+
+    .login-side {
+      position: relative;
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 42px;
+      overflow: hidden;
+      background: var(--accent);
+      color: var(--surface);
+    }
+
+    .login-side::before,
+    .login-side::after {
+      position: absolute;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--surface) 8%, transparent);
+      content: "";
+    }
+
+    .login-side::before {
+      width: 420px;
+      height: 420px;
+      right: -170px;
+      bottom: -110px;
+    }
+
+    .login-side::after {
+      width: 240px;
+      height: 240px;
+      left: -90px;
+      top: 25%;
+    }
+
+    .login-brand {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .login-brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--surface);
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .login-brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-brand-text strong {
+      font-size: 14px;
+      letter-spacing: .08em;
+    }
+
+    .login-brand-text span {
+      margin-top: 2px;
+      opacity: .7;
+      font-size: 11px;
+    }
+
+    .login-side-center {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+    }
+
+    .login-side-center h1 {
+      margin: 0;
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: .95;
+      letter-spacing: -.055em;
+    }
+
+    .login-side-center span {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      opacity: .72;
+    }
+
+    .login-side-foot {
+      position: relative;
+      z-index: 1;
+      font-size: 10px;
+      opacity: .6;
+    }
+
+    .login-main {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      padding: 38px;
+      background: var(--surface);
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .login-box-head {
+      margin-bottom: 26px;
+    }
+
+    .login-box-head span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .login-box-head h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .login-form {
+      display: grid;
+      gap: 15px;
+    }
+
+    .login-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .login-field label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .login-field input {
+      width: 100%;
+      min-height: 44px;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .login-field input:focus {
+      border-color: var(--accent);
+    }
+
+    .login-submit {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--accent);
+      color: var(--surface);
+      font-weight: 700;
+    }
+
+    .login-submit:hover {
+      background: var(--accent-strong);
+    }
+
+    .login-links {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .login-links button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .login-links button:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 760px) {
+      .login-page {
+        grid-template-columns: 1fr;
+      }
+
+      .login-side {
+        min-height: 250px;
+        padding: 28px;
+      }
+
+      .login-side-center {
+        margin: 45px 0 20px;
+      }
+
+      .login-side-center h1 {
+        font-size: 42px;
+      }
+
+      .login-main {
+        min-height: auto;
+        padding: 44px 24px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="portal-app" id="portalApp">
+<div class="login-page">
 
-  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <section class="login-side">
 
-  <aside class="sidebar" id="sidebar">
+    <div class="login-brand">
 
-    <div class="sidebar-head">
+      <span class="login-brand-mark">M</span>
 
-      <button class="brand" type="button" data-page-target="dashboard">
-        <span class="brand-icon">M</span>
-
-        <span class="brand-text">
-          <strong>MOD PORTAL</strong>
-          <small data-c5-edit data-content-key="portal.subtitle"></small>
-        </span>
-      </button>
-
-      <button
-        class="sidebar-toggle"
-        id="sidebarToggle"
-        type="button"
-        aria-label="Toggle sidebar"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-    </div>
-
-    <button class="sidebar-user" type="button" data-page-target="profile">
-
-      <span class="avatar" data-user-avatar>MP</span>
-
-      <span class="sidebar-user-info">
-        <strong data-user-name>Portal User</strong>
-        <small data-user-role>Staff</small>
+      <span class="login-brand-text">
+        <strong>MOD PORTAL</strong>
+        <span>Staff Portal</span>
       </span>
 
-      <span class="clearance" data-user-clearance>C1</span>
-
-    </button>
-
-    <nav class="sidebar-nav">
-
-      <div class="nav-group">
-
-        <span class="nav-label">Portal</span>
-
-        <button class="nav-item active" type="button" data-page-target="dashboard">
-          <span class="nav-icon">⌂</span>
-          <span>Dashboard</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="training">
-          <span class="nav-icon">▤</span>
-          <span>Training</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="grades">
-          <span class="nav-icon">✓</span>
-          <span>Grades</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="messages">
-          <span class="nav-icon">✉</span>
-          <span>Messages</span>
-          <span class="nav-count" data-message-count hidden>0</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="notifications">
-          <span class="nav-icon">!</span>
-          <span>Notifications</span>
-          <span class="nav-count" data-notification-count hidden>0</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="policies">
-          <span class="nav-icon">§</span>
-          <span>Policies</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="resources">
-          <span class="nav-icon">□</span>
-          <span>Resources</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="staff">
-          <span class="nav-icon">◎</span>
-          <span>Staff</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="onboarding">
-          <span class="nav-icon">→</span>
-          <span>Onboarding</span>
-        </button>
-
-      </div>
-
-      <div class="nav-group" data-clearance-min="2">
-
-        <span class="nav-label">Mentor</span>
-
-        <button class="nav-item" type="button" data-page-target="mentor">
-          <span class="nav-icon">◇</span>
-          <span>Mentor Tools</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="submissions">
-          <span class="nav-icon">▣</span>
-          <span>Submission Queue</span>
-          <span class="nav-count" data-submission-count hidden>0</span>
-        </button>
-
-      </div>
-
-      <div class="nav-group" data-clearance-min="4">
-
-        <span class="nav-label">Management</span>
-
-        <button class="nav-item" type="button" data-page-target="staff-management">
-          <span class="nav-icon">+</span>
-          <span>Staff Management</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="curriculum">
-          <span class="nav-icon">≡</span>
-          <span>Curriculum</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="onboarding-management">
-          <span class="nav-icon">↳</span>
-          <span>Onboarding Setup</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="restricted-records">
-          <span class="nav-icon">△</span>
-          <span>Restricted Records</span>
-        </button>
-
-      </div>
-
-      <div class="nav-group" data-clearance-min="5">
-
-        <span class="nav-label">Administration</span>
-
-        <button class="nav-item" type="button" data-page-target="accounts">
-          <span class="nav-icon">@</span>
-          <span>Accounts</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="announcements">
-          <span class="nav-icon">※</span>
-          <span>Announcements</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="audit-log">
-          <span class="nav-icon">⌁</span>
-          <span>Audit Log</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="admin">
-          <span class="nav-icon">◆</span>
-          <span>Admin Tools</span>
-        </button>
-
-      </div>
-
-      <div class="nav-group">
-
-        <span class="nav-label">Account</span>
-
-        <button class="nav-item" type="button" data-page-target="profile">
-          <span class="nav-icon">○</span>
-          <span>Profile</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="settings">
-          <span class="nav-icon">⚙</span>
-          <span>Settings</span>
-        </button>
-
-        <button class="nav-item" type="button" data-page-target="help">
-          <span class="nav-icon">?</span>
-          <span>Help</span>
-        </button>
-
-      </div>
-
-    </nav>
-
-    <div class="sidebar-foot">
-      <button class="signout" id="signOutButton" type="button">
-        <span>↪</span>
-        <span>Sign Out</span>
-      </button>
     </div>
 
-  </aside>
+    <div class="login-side-center">
+      <span>Private Access</span>
+      <h1>Welcome back.</h1>
+    </div>
 
-  <main class="main">
+    <div class="login-side-foot">
+      Authorized staff only.
+    </div>
 
-    <header class="topbar">
+  </section>
 
-      <button
-        class="mobile-menu"
-        id="mobileMenu"
-        type="button"
-        aria-label="Open menu"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+  <main class="login-main">
 
-      <div class="topbar-search">
-        <span>⌕</span>
-        <input
-          id="portalSearch"
-          type="search"
-          placeholder="Search portal"
-          autocomplete="off"
-        >
+    <div class="login-box">
+
+      <div class="login-box-head">
+        <span>Sign In</span>
+        <h2>Mod Portal</h2>
       </div>
 
-      <div class="topbar-actions">
+      <form class="login-form" action="portal.html">
 
-        <button
-          class="topbar-button"
-          type="button"
-          data-page-target="messages"
-          aria-label="Messages"
-        >
-          ✉
-          <span data-message-indicator hidden></span>
+        <div class="login-field">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="login-field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button class="login-submit" type="submit">
+          Sign In
         </button>
 
-        <button
-          class="topbar-button"
-          type="button"
-          id="notificationButton"
-          aria-label="Notifications"
-        >
-          !
-          <span data-notification-indicator hidden></span>
+      </form>
+
+      <div class="login-links">
+
+        <button type="button">
+          Forgot Password
         </button>
 
-        <button class="topbar-user" type="button" data-page-target="profile">
-          <span class="topbar-user-copy">
-            <strong data-user-name>Portal User</strong>
-            <small data-user-role>Staff</small>
-          </span>
-          <span class="avatar small" data-user-avatar>MP</span>
+        <button type="button">
+          Request Access
         </button>
 
       </div>
-
-    </header>
-
-    <div class="content">
-
-      <section class="page active" id="dashboard" data-page="dashboard">
-
-        <div class="page-head">
-
-          <div>
-            <span class="eyebrow">Dashboard</span>
-            <h1 data-content-key="dashboard.title" data-c5-edit>Welcome</h1>
-            <p data-content-key="dashboard.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" type="button" data-page-target="training">
-            Continue Training
-          </button>
-
-        </div>
-
-        <div class="dashboard-grid">
-
-          <div class="dashboard-main">
-
-            <section class="panel progress-panel">
-
-              <div class="panel-head">
-                <div>
-                  <span class="panel-label">Training</span>
-                  <h2>Progress</h2>
-                </div>
-
-                <button class="text-action" type="button" data-page-target="training">
-                  View Training
-                </button>
-              </div>
-
-              <div class="progress-summary">
-
-                <div class="progress-stat">
-                  <strong data-training-progress>0%</strong>
-                  <span>Overall</span>
-                </div>
-
-                <div class="progress-track">
-                  <span data-training-progress-bar></span>
-                </div>
-
-              </div>
-
-              <div class="current-training" data-current-training>
-
-                <div>
-                  <span class="meta">Current Lesson</span>
-                  <strong data-current-lesson-title>None</strong>
-                </div>
-
-                <button type="button" data-current-lesson-action>
-                  Open
-                </button>
-
-              </div>
-
-            </section>
-
-            <section class="panel activity-panel">
-
-              <div class="panel-head">
-                <div>
-                  <span class="panel-label">Updates</span>
-                  <h2>Recent Activity</h2>
-                </div>
-              </div>
-
-              <div class="activity-list" id="recentActivity">
-                <div class="empty-state">
-                  <span>—</span>
-                  <p>No recent activity.</p>
-                </div>
-              </div>
-
-            </section>
-
-            <section class="panel feedback-panel">
-
-              <div class="panel-head">
-                <div>
-                  <span class="panel-label">Training</span>
-                  <h2>Recent Feedback</h2>
-                </div>
-
-                <button class="text-action" type="button" data-page-target="grades">
-                  View All
-                </button>
-              </div>
-
-              <div id="recentFeedback" class="feedback-list">
-                <div class="empty-state">
-                  <span>—</span>
-                  <p>No recent feedback.</p>
-                </div>
-              </div>
-
-            </section>
-
-          </div>
-
-          <aside class="dashboard-side">
-
-            <section class="panel dashboard-profile">
-
-              <div class="profile-summary">
-
-                <span class="avatar large" data-user-avatar>MP</span>
-
-                <div>
-                  <strong data-user-name>Portal User</strong>
-                  <span data-user-role>Staff</span>
-                </div>
-
-              </div>
-
-              <div class="profile-stats">
-
-                <div>
-                  <strong data-user-clearance-number>1</strong>
-                  <span>Clearance</span>
-                </div>
-
-                <div>
-                  <strong data-user-grade>—</strong>
-                  <span>Grade</span>
-                </div>
-
-              </div>
-
-            </section>
-
-            <section class="panel mentor-summary">
-
-              <div class="panel-head">
-                <div>
-                  <span class="panel-label">Assigned</span>
-                  <h2>Mentor</h2>
-                </div>
-              </div>
-
-              <div id="assignedMentor">
-                <div class="empty-state compact">
-                  <p>No mentor assigned.</p>
-                </div>
-              </div>
-
-            </section>
-
-            <section class="panel notices-panel">
-
-              <div class="panel-head">
-                <div>
-                  <span class="panel-label">Portal</span>
-                  <h2>Notices</h2>
-                </div>
-              </div>
-
-              <div id="dashboardNotices">
-                <div class="empty-state compact">
-                  <p>No notices.</p>
-                </div>
-              </div>
-
-            </section>
-
-            <section class="panel quick-links">
-
-              <div class="panel-head">
-                <div>
-                  <span class="panel-label">Navigation</span>
-                  <h2>Quick Links</h2>
-                </div>
-              </div>
-
-              <div class="quick-link-grid">
-
-                <button type="button" data-page-target="messages">
-                  <strong>Messages</strong>
-                  <span data-message-summary>0 unread</span>
-                </button>
-
-                <button type="button" data-page-target="policies">
-                  <strong>Policies</strong>
-                  <span data-content-key="dashboard.quick.policies" data-c5-edit></span>
-                </button>
-
-                <button type="button" data-page-target="resources">
-                  <strong>Resources</strong>
-                  <span data-content-key="dashboard.quick.resources" data-c5-edit></span>
-                </button>
-
-                <button type="button" data-page-target="settings">
-                  <strong>Settings</strong>
-                  <span data-content-key="dashboard.quick.settings" data-c5-edit></span>
-                </button>
-
-              </div>
-
-            </section>
-
-          </aside>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="training" data-page="training">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Training</span>
-            <h1 data-content-key="training.title" data-c5-edit>Training</h1>
-            <p data-content-key="training.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="training-layout">
-
-          <aside class="panel training-sidebar">
-
-            <div class="panel-head">
-              <div>
-                <span class="panel-label">Curriculum</span>
-                <h2>Lessons</h2>
-              </div>
-            </div>
-
-            <div class="lesson-list" id="lessonList"></div>
-
-          </aside>
-
-          <section class="panel lesson-view" id="lessonView">
-
-            <div class="empty-state large">
-              <span>▤</span>
-              <h2>Select a lesson</h2>
-              <p data-content-key="training.empty" data-c5-edit></p>
-            </div>
-
-          </section>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="grades" data-page="grades">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Performance</span>
-            <h1 data-content-key="grades.title" data-c5-edit>Grades & Feedback</h1>
-            <p data-content-key="grades.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-
-          <section class="stat-card">
-            <span>Average</span>
-            <strong data-grade-average>—</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Completed</span>
-            <strong data-grade-completed>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Pending</span>
-            <strong data-grade-pending>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Feedback</span>
-            <strong data-feedback-count>0</strong>
-          </section>
-
-        </div>
-
-        <section class="panel">
-
-          <div class="panel-head">
-            <div>
-              <span class="panel-label">History</span>
-              <h2>Assessments</h2>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Assessment</th>
-                  <th>Status</th>
-                  <th>Score</th>
-                  <th>Reviewer</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="gradeTable"></tbody>
-            </table>
-          </div>
-
-          <div class="empty-state table-empty" id="gradeEmpty">
-            <p>No assessments yet.</p>
-          </div>
-
-        </section>
-
-      </section>
-
-      <section class="page" id="messages" data-page="messages">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Communication</span>
-            <h1 data-content-key="messages.title" data-c5-edit>Messages</h1>
-            <p data-content-key="messages.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="newMessageButton" type="button">
-            New Message
-          </button>
-        </div>
-
-        <div class="messages-layout">
-
-          <section class="panel message-list-panel">
-
-            <div class="message-search">
-              <input
-                type="search"
-                id="messageSearch"
-                placeholder="Search messages"
-              >
-            </div>
-
-            <div class="message-thread-list" id="messageThreadList"></div>
-
-          </section>
-
-          <section class="panel conversation-panel">
-
-            <div class="conversation-empty" id="conversationEmpty">
-              <div class="empty-state large">
-                <span>✉</span>
-                <h2>Select a conversation</h2>
-              </div>
-            </div>
-
-            <div class="conversation" id="conversation" hidden>
-
-              <div class="conversation-head">
-
-                <span class="avatar" data-conversation-avatar>MP</span>
-
-                <div>
-                  <strong data-conversation-name></strong>
-                  <span data-conversation-role></span>
-                </div>
-
-              </div>
-
-              <div class="conversation-messages" id="conversationMessages"></div>
-
-              <form class="message-compose" id="messageForm">
-
-                <textarea
-                  id="messageInput"
-                  placeholder="Write a message"
-                ></textarea>
-
-                <button type="submit">
-                  Send
-                </button>
-
-              </form>
-
-            </div>
-
-          </section>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="notifications" data-page="notifications">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Updates</span>
-            <h1 data-content-key="notifications.title" data-c5-edit>Notifications</h1>
-            <p data-content-key="notifications.description" data-c5-edit></p>
-          </div>
-
-          <button class="secondary-action" id="markNotificationsRead" type="button">
-            Mark All Read
-          </button>
-        </div>
-
-        <section class="panel">
-          <div class="notification-list" id="notificationList"></div>
-
-          <div class="empty-state" id="notificationEmpty">
-            <p>No notifications.</p>
-          </div>
-        </section>
-
-      </section>
-
-      <section class="page" id="policies" data-page="policies">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Handbook</span>
-            <h1 data-content-key="policies.title" data-c5-edit>Policies</h1>
-            <p data-content-key="policies.description" data-c5-edit></p>
-          </div>
-
-          <button
-            class="primary-action"
-            type="button"
-            data-clearance-min="5"
-            id="createPolicyButton"
-          >
-            New Policy
-          </button>
-        </div>
-
-        <div class="library-toolbar">
-
-          <input
-            type="search"
-            id="policySearch"
-            placeholder="Search policies"
-          >
-
-          <select id="policyCategoryFilter">
-            <option value="">All Categories</option>
-          </select>
-
-        </div>
-
-        <div class="card-grid" id="policyGrid"></div>
-
-        <div class="empty-state" id="policyEmpty">
-          <p>No policies available.</p>
-        </div>
-
-      </section>
-
-      <section class="page" id="resources" data-page="resources">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Library</span>
-            <h1 data-content-key="resources.title" data-c5-edit>Resources</h1>
-            <p data-content-key="resources.description" data-c5-edit></p>
-          </div>
-
-          <button
-            class="primary-action"
-            type="button"
-            data-clearance-min="5"
-            id="createResourceButton"
-          >
-            New Resource
-          </button>
-        </div>
-
-        <div class="library-toolbar">
-
-          <input
-            type="search"
-            id="resourceSearch"
-            placeholder="Search resources"
-          >
-
-          <select id="resourceCategoryFilter">
-            <option value="">All Categories</option>
-          </select>
-
-        </div>
-
-        <div class="card-grid" id="resourceGrid"></div>
-
-        <div class="empty-state" id="resourceEmpty">
-          <p>No resources available.</p>
-        </div>
-
-      </section>
-
-      <section class="page" id="staff" data-page="staff">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Directory</span>
-            <h1 data-content-key="staff.title" data-c5-edit>Staff</h1>
-            <p data-content-key="staff.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="library-toolbar">
-
-          <input
-            type="search"
-            id="staffSearch"
-            placeholder="Search staff"
-          >
-
-          <select id="staffRoleFilter">
-            <option value="">All Roles</option>
-          </select>
-
-        </div>
-
-        <div class="staff-grid" id="staffGrid"></div>
-
-        <div class="empty-state" id="staffEmpty">
-          <p>No staff found.</p>
-        </div>
-
-      </section>
-
-      <section class="page" id="onboarding" data-page="onboarding">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Getting Started</span>
-            <h1 data-content-key="onboarding.title" data-c5-edit>Onboarding</h1>
-            <p data-content-key="onboarding.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <section class="panel">
-
-          <div class="onboarding-progress">
-            <strong data-onboarding-progress>0%</strong>
-            <div class="progress-track">
-              <span data-onboarding-progress-bar></span>
-            </div>
-          </div>
-
-          <div class="checklist" id="onboardingChecklist"></div>
-
-        </section>
-
-      </section>
-
-      <section class="page" id="mentor" data-page="mentor" data-clearance-min="2">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Mentor</span>
-            <h1 data-content-key="mentor.title" data-c5-edit>Mentor Tools</h1>
-            <p data-content-key="mentor.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-
-          <section class="stat-card">
-            <span>Cadets</span>
-            <strong data-mentor-cadet-count>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Pending Reviews</span>
-            <strong data-mentor-review-count>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Messages</span>
-            <strong data-mentor-message-count>0</strong>
-          </section>
-
-        </div>
-
-        <div class="management-grid">
-
-          <section class="panel">
-
-            <div class="panel-head">
-              <div>
-                <span class="panel-label">Assigned</span>
-                <h2>Cadets</h2>
-              </div>
-            </div>
-
-            <div id="mentorCadetList"></div>
-
-          </section>
-
-          <section class="panel">
-
-            <div class="panel-head">
-              <div>
-                <span class="panel-label">Selected</span>
-                <h2>Cadet Details</h2>
-              </div>
-            </div>
-
-            <div id="mentorCadetDetail">
-              <div class="empty-state">
-                <p>Select a cadet.</p>
-              </div>
-            </div>
-
-          </section>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="submissions" data-page="submissions" data-clearance-min="2">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Review</span>
-            <h1 data-content-key="submissions.title" data-c5-edit>Submission Queue</h1>
-            <p data-content-key="submissions.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <section class="panel">
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Staff</th>
-                  <th>Submission</th>
-                  <th>Submitted</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="submissionTable"></tbody>
-            </table>
-          </div>
-
-          <div class="empty-state" id="submissionEmpty">
-            <p>No pending submissions.</p>
-          </div>
-
-        </section>
-
-      </section>
-
-      <section
-        class="page"
-        id="staff-management"
-        data-page="staff-management"
-        data-clearance-min="4"
-      >
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Management</span>
-            <h1 data-content-key="staffManagement.title" data-c5-edit>Staff Management</h1>
-            <p data-content-key="staffManagement.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="inviteStaffButton" type="button">
-            Add Staff
-          </button>
-        </div>
-
-        <section class="panel">
-
-          <div class="management-toolbar">
-
-            <input
-              type="search"
-              id="staffManagementSearch"
-              placeholder="Search accounts"
-            >
-
-            <select id="staffManagementStatus">
-              <option value="">All Statuses</option>
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="suspended">Suspended</option>
-            </select>
-
-          </div>
-
-          <div class="table-wrap">
-
-            <table>
-              <thead>
-                <tr>
-                  <th>Staff</th>
-                  <th>Role</th>
-                  <th>Clearance</th>
-                  <th>Mentor</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-
-              <tbody id="staffManagementTable"></tbody>
-            </table>
-
-          </div>
-
-        </section>
-
-      </section>
-
-      <section class="page" id="curriculum" data-page="curriculum" data-clearance-min="4">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Management</span>
-            <h1 data-content-key="curriculum.title" data-c5-edit>Curriculum</h1>
-            <p data-content-key="curriculum.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="newLessonButton" type="button">
-            New Lesson
-          </button>
-        </div>
-
-        <div class="management-grid">
-
-          <section class="panel">
-            <div class="panel-head">
-              <div>
-                <span class="panel-label">Lessons</span>
-                <h2>Curriculum</h2>
-              </div>
-            </div>
-
-            <div id="curriculumLessonList"></div>
-          </section>
-
-          <section class="panel">
-            <div id="curriculumEditor">
-              <div class="empty-state">
-                <p>Select a lesson.</p>
-              </div>
-            </div>
-          </section>
-
-        </div>
-
-      </section>
-
-      <section
-        class="page"
-        id="onboarding-management"
-        data-page="onboarding-management"
-        data-clearance-min="4"
-      >
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Management</span>
-            <h1 data-content-key="onboardingManagement.title" data-c5-edit>Onboarding Setup</h1>
-            <p data-content-key="onboardingManagement.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="newOnboardingStepButton" type="button">
-            New Step
-          </button>
-        </div>
-
-        <section class="panel">
-          <div id="onboardingManagementList"></div>
-        </section>
-
-      </section>
-
-      <section
-        class="page"
-        id="restricted-records"
-        data-page="restricted-records"
-        data-clearance-min="4"
-      >
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Restricted</span>
-            <h1 data-content-key="restricted.title" data-c5-edit>Restricted Records</h1>
-            <p data-content-key="restricted.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="newRestrictedRecordButton" type="button">
-            New Record
-          </button>
-        </div>
-
-        <div class="management-toolbar">
-
-          <input
-            type="search"
-            id="restrictedSearch"
-            placeholder="Search records"
-          >
-
-          <select id="restrictedStatusFilter">
-            <option value="">All Records</option>
-          </select>
-
-        </div>
-
-        <section class="panel">
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Record</th>
-                  <th>User ID</th>
-                  <th>Status</th>
-                  <th>Updated</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="restrictedRecordTable"></tbody>
-            </table>
-          </div>
-
-          <div class="empty-state" id="restrictedEmpty">
-            <p>No records.</p>
-          </div>
-
-        </section>
-
-      </section>
-
-      <section class="page" id="accounts" data-page="accounts" data-clearance-min="5">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Administration</span>
-            <h1 data-content-key="accounts.title" data-c5-edit>Accounts</h1>
-            <p data-content-key="accounts.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-
-          <section class="stat-card">
-            <span>Active</span>
-            <strong data-account-active>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Pending</span>
-            <strong data-account-pending>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Suspended</span>
-            <strong data-account-suspended>0</strong>
-          </section>
-
-          <section class="stat-card">
-            <span>Password Reset</span>
-            <strong data-account-reset>0</strong>
-          </section>
-
-        </div>
-
-        <section class="panel">
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Account</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Last Login</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="accountTable"></tbody>
-            </table>
-          </div>
-
-        </section>
-
-      </section>
-
-      <section
-        class="page"
-        id="announcements"
-        data-page="announcements"
-        data-clearance-min="5"
-      >
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Administration</span>
-            <h1 data-content-key="announcements.title" data-c5-edit>Announcements</h1>
-            <p data-content-key="announcements.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="newAnnouncementButton" type="button">
-            New Announcement
-          </button>
-        </div>
-
-        <div class="card-grid" id="announcementGrid"></div>
-
-        <div class="empty-state" id="announcementEmpty">
-          <p>No announcements.</p>
-        </div>
-
-      </section>
-
-      <section
-        class="page"
-        id="audit-log"
-        data-page="audit-log"
-        data-clearance-min="5"
-      >
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Administration</span>
-            <h1 data-content-key="audit.title" data-c5-edit>Audit Log</h1>
-            <p data-content-key="audit.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="management-toolbar">
-
-          <input
-            type="search"
-            id="auditSearch"
-            placeholder="Search audit log"
-          >
-
-          <select id="auditTypeFilter">
-            <option value="">All Actions</option>
-          </select>
-
-        </div>
-
-        <section class="panel">
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>User</th>
-                  <th>Action</th>
-                  <th>Target</th>
-                  <th>Details</th>
-                </tr>
-              </thead>
-              <tbody id="auditTable"></tbody>
-            </table>
-          </div>
-
-          <div class="empty-state" id="auditEmpty">
-            <p>No audit entries.</p>
-          </div>
-
-        </section>
-
-      </section>
-
-      <section class="page" id="admin" data-page="admin" data-clearance-min="5">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Administration</span>
-            <h1 data-content-key="admin.title" data-c5-edit>Admin Tools</h1>
-            <p data-content-key="admin.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="admin-grid">
-
-          <button class="admin-card" type="button" data-admin-action="maintenance">
-            <strong>Maintenance Mode</strong>
-            <span data-content-key="admin.maintenance" data-c5-edit></span>
-          </button>
-
-          <button class="admin-card" type="button" data-admin-action="backup">
-            <strong>Backups</strong>
-            <span data-content-key="admin.backup" data-c5-edit></span>
-          </button>
-
-          <button class="admin-card" type="button" data-admin-action="permissions">
-            <strong>Permissions</strong>
-            <span data-content-key="admin.permissions" data-c5-edit></span>
-          </button>
-
-          <button class="admin-card" type="button" data-admin-action="content">
-            <strong>Portal Content</strong>
-            <span data-content-key="admin.content" data-c5-edit></span>
-          </button>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="profile" data-page="profile">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Account</span>
-            <h1 data-content-key="profile.title" data-c5-edit>Profile</h1>
-            <p data-content-key="profile.description" data-c5-edit></p>
-          </div>
-
-          <button class="primary-action" id="editProfileButton" type="button">
-            Edit Profile
-          </button>
-        </div>
-
-        <div class="profile-layout">
-
-          <section class="panel profile-card">
-
-            <span class="avatar huge" data-user-avatar>MP</span>
-
-            <h2 data-user-name>Portal User</h2>
-            <span data-user-role>Staff</span>
-
-            <div class="profile-meta">
-
-              <div>
-                <span>Clearance</span>
-                <strong data-user-clearance>1</strong>
-              </div>
-
-              <div>
-                <span>Status</span>
-                <strong data-user-status>Active</strong>
-              </div>
-
-            </div>
-
-          </section>
-
-          <section class="panel">
-
-            <div class="panel-head">
-              <div>
-                <span class="panel-label">Account</span>
-                <h2>Details</h2>
-              </div>
-            </div>
-
-            <dl class="detail-list">
-
-              <div>
-                <dt>Display Name</dt>
-                <dd data-user-name>Portal User</dd>
-              </div>
-
-              <div>
-                <dt>Username</dt>
-                <dd data-user-username>—</dd>
-              </div>
-
-              <div>
-                <dt>Role</dt>
-                <dd data-user-role>Staff</dd>
-              </div>
-
-              <div>
-                <dt>Clearance</dt>
-                <dd data-user-clearance>1</dd>
-              </div>
-
-              <div>
-                <dt>Mentor</dt>
-                <dd data-user-mentor>—</dd>
-              </div>
-
-            </dl>
-
-          </section>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="settings" data-page="settings">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Account</span>
-            <h1 data-content-key="settings.title" data-c5-edit>Settings</h1>
-            <p data-content-key="settings.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="settings-layout">
-
-          <nav class="settings-nav">
-
-            <button class="settings-tab active" type="button" data-settings-target="appearance">
-              Appearance
-            </button>
-
-            <button class="settings-tab" type="button" data-settings-target="accessibility">
-              Accessibility
-            </button>
-
-            <button class="settings-tab" type="button" data-settings-target="notifications">
-              Notifications
-            </button>
-
-            <button class="settings-tab" type="button" data-settings-target="messages">
-              Messages
-            </button>
-
-            <button class="settings-tab" type="button" data-settings-target="account">
-              Account
-            </button>
-
-            <button
-              class="settings-tab"
-              type="button"
-              data-settings-target="portal"
-              data-clearance-min="5"
-            >
-              Portal
-            </button>
-
-          </nav>
-
-          <section class="panel settings-content">
-
-            <div class="settings-section active" data-settings-section="appearance">
-
-              <div class="settings-heading">
-                <h2>Appearance</h2>
-                <p data-content-key="settings.appearance.description" data-c5-edit></p>
-              </div>
-
-              <div class="setting-row">
-                <div>
-                  <strong>Theme</strong>
-                  <span data-content-key="settings.theme.description" data-c5-edit></span>
-                </div>
-
-                <select id="themeSelect">
-                  <option value="light">Light</option>
-                  <option value="dark">Dark</option>
-                  <option value="system">System</option>
-                </select>
-              </div>
-
-              <div class="setting-row">
-                <div>
-                  <strong>Layout Density</strong>
-                  <span data-content-key="settings.density.description" data-c5-edit></span>
-                </div>
-
-                <select id="densitySelect">
-                  <option value="comfortable">Comfortable</option>
-                  <option value="compact">Compact</option>
-                </select>
-              </div>
-
-              <div class="setting-row">
-                <div>
-                  <strong>Sidebar</strong>
-                  <span data-content-key="settings.sidebar.description" data-c5-edit></span>
-                </div>
-
-                <select id="sidebarPreference">
-                  <option value="expanded">Expanded</option>
-                  <option value="collapsed">Collapsed</option>
-                  <option value="auto">Automatic</option>
-                </select>
-              </div>
-
-            </div>
-
-            <div class="settings-section" data-settings-section="accessibility">
-
-              <div class="settings-heading">
-                <h2>Accessibility</h2>
-                <p data-content-key="settings.accessibility.description" data-c5-edit></p>
-              </div>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Reduced Motion</strong>
-                  <small data-content-key="settings.motion.description" data-c5-edit></small>
-                </span>
-
-                <input type="checkbox" id="reducedMotionToggle">
-                <span class="toggle"></span>
-              </label>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>High Contrast</strong>
-                  <small data-content-key="settings.contrast.description" data-c5-edit></small>
-                </span>
-
-                <input type="checkbox" id="highContrastToggle">
-                <span class="toggle"></span>
-              </label>
-
-            </div>
-
-            <div class="settings-section" data-settings-section="notifications">
-
-              <div class="settings-heading">
-                <h2>Notifications</h2>
-                <p data-content-key="settings.notifications.description" data-c5-edit></p>
-              </div>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Messages</strong>
-                </span>
-
-                <input type="checkbox" id="notifyMessages" checked>
-                <span class="toggle"></span>
-              </label>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Training</strong>
-                </span>
-
-                <input type="checkbox" id="notifyTraining" checked>
-                <span class="toggle"></span>
-              </label>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Grades & Feedback</strong>
-                </span>
-
-                <input type="checkbox" id="notifyGrades" checked>
-                <span class="toggle"></span>
-              </label>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Policy Updates</strong>
-                </span>
-
-                <input type="checkbox" id="notifyPolicies" checked>
-                <span class="toggle"></span>
-              </label>
-
-            </div>
-
-            <div class="settings-section" data-settings-section="messages">
-
-              <div class="settings-heading">
-                <h2>Messages</h2>
-                <p data-content-key="settings.messages.description" data-c5-edit></p>
-              </div>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Message Previews</strong>
-                </span>
-
-                <input type="checkbox" id="messagePreviewToggle" checked>
-                <span class="toggle"></span>
-              </label>
-
-            </div>
-
-            <div class="settings-section" data-settings-section="account">
-
-              <div class="settings-heading">
-                <h2>Account</h2>
-                <p data-content-key="settings.account.description" data-c5-edit></p>
-              </div>
-
-              <div class="setting-actions">
-
-                <button class="secondary-action" id="changePasswordButton" type="button">
-                  Change Password
-                </button>
-
-                <button class="secondary-action" id="signOutEverywhereButton" type="button">
-                  Sign Out Everywhere
-                </button>
-
-              </div>
-
-            </div>
-
-            <div
-              class="settings-section"
-              data-settings-section="portal"
-              data-clearance-min="5"
-            >
-
-              <div class="settings-heading">
-                <h2>Portal</h2>
-                <p data-content-key="settings.portal.description" data-c5-edit></p>
-              </div>
-
-              <label class="toggle-row">
-                <span>
-                  <strong>Content Editing</strong>
-                  <small>Enable editing for portal text.</small>
-                </span>
-
-                <input type="checkbox" id="contentEditToggle">
-                <span class="toggle"></span>
-              </label>
-
-              <div class="setting-actions">
-                <button class="secondary-action" id="savePortalContentButton" type="button">
-                  Save Content
-                </button>
-
-                <button class="danger-action" id="resetPortalContentButton" type="button">
-                  Reset Content
-                </button>
-              </div>
-
-            </div>
-
-          </section>
-
-        </div>
-
-      </section>
-
-      <section class="page" id="help" data-page="help">
-
-        <div class="page-head">
-          <div>
-            <span class="eyebrow">Support</span>
-            <h1 data-content-key="help.title" data-c5-edit>Help</h1>
-            <p data-content-key="help.description" data-c5-edit></p>
-          </div>
-        </div>
-
-        <div class="card-grid" id="helpGrid"></div>
-
-        <div class="empty-state" id="helpEmpty">
-          <p>No help articles available.</p>
-        </div>
-
-      </section>
-
-      <section class="page permission-page" id="permissionDenied">
-
-        <div class="permission-state">
-          <span>!</span>
-          <h1>Access Restricted</h1>
-          <p>You do not have permission to view this section.</p>
-          <button class="primary-action" type="button" data-page-target="dashboard">
-            Dashboard
-          </button>
-        </div>
-
-      </section>
 
     </div>
 
   </main>
 
 </div>
-
-<div class="drawer" id="notificationDrawer" hidden>
-
-  <div class="drawer-head">
-    <h2>Notifications</h2>
-
-    <button
-      class="icon-action"
-      id="closeNotificationDrawer"
-      type="button"
-      aria-label="Close notifications"
-    >
-      ×
-    </button>
-  </div>
-
-  <div class="drawer-body" id="notificationDrawerList"></div>
-
-</div>
-
-<div class="modal-layer" id="modalLayer" hidden>
-
-  <div class="modal-backdrop" data-close-modal></div>
-
-  <section
-    class="modal"
-    id="portalModal"
-    role="dialog"
-    aria-modal="true"
-  >
-
-    <div class="modal-head">
-      <h2 id="modalTitle"></h2>
-
-      <button
-        class="icon-action"
-        type="button"
-        data-close-modal
-        aria-label="Close"
-      >
-        ×
-      </button>
-    </div>
-
-    <div class="modal-body" id="modalBody"></div>
-
-    <div class="modal-actions" id="modalActions"></div>
-
-  </section>
-
-</div>
-
-<div class="toast-region" id="toastRegion"></div>
-
-<script src="script.js"></script>
 
 </body>
 </html>
