@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mod Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+<div class="brand-row">
+<div class="brand">MOD PORTAL</div>
+<button class="icon-btn" id="sidebarToggle" type="button" aria-label="Toggle sidebar">☰</button>
+</div>
+<div class="user-card">
+<div class="avatar" id="sidebarAvatar">MP</div>
+<div class="user-card-copy">
+<strong id="sidebarName">Staff</strong>
+<span id="sidebarRole">Portal member</span>
+</div>
+</div>
+<nav class="nav" id="portalNav">
+<div class="nav-group">
+<span>Portal</span>
+<button data-page="dashboard" class="active">Dashboard</button>
+<button data-page="training">Training</button>
+<button data-page="grades">Grades & Feedback</button>
+<button data-page="messages">Messages</button>
+<button data-page="notifications">Notifications</button>
+<button data-page="policies">Policies</button>
+<button data-page="resources">Resources</button>
+<button data-page="staff">Staff Directory</button>
+<button data-page="onboarding">Onboarding</button>
+</div>
+<div class="nav-group" data-min-clearance="2">
+<span>Mentor</span>
+<button data-page="mentor">Mentor Tools</button>
+<button data-page="submissions">Submission Queue</button>
+</div>
+<div class="nav-group" data-min-clearance="4">
+<span>Management</span>
+<button data-page="staff-management">Staff Management</button>
+<button data-page="curriculum">Curriculum Management</button>
+<button data-page="onboarding-management">Onboarding Management</button>
+<button data-page="restricted">Restricted Records</button>
+<button data-page="audit">Audit Log</button>
+</div>
+<div class="nav-group" data-min-clearance="5">
+<span>Administration</span>
+<button data-page="accounts">Accounts</button>
+<button data-page="announcements">Announcements</button>
+<button data-page="portal-content">Portal Content</button>
+<button data-page="admin-tools">Admin Tools</button>
+</div>
+<div class="nav-group">
+<span>Account</span>
+<button data-page="profile">Profile</button>
+<button data-page="settings">Settings</button>
+<button data-page="help">Help / Portal Guide</button>
+</div>
+</nav>
+<button class="btn danger sidebar-logout" id="logoutButton" type="button">Sign Out</button>
+</aside>
+<main class="main-shell">
+<header class="topbar">
+<div>
+<span class="eyebrow">Staff workspace</span>
+<h1 id="pageTitle">Dashboard</h1>
+</div>
+<div class="topbar-actions">
+<label class="search-box"><span>⌕</span><input id="pageSearch" placeholder="Search this page"></label>
+<button class="icon-btn" data-page-shortcut="messages" type="button" aria-label="Messages">✉</button>
+<button class="icon-btn" data-page-shortcut="notifications" type="button" aria-label="Notifications">●</button>
+</div>
+</header>
+<section class="page-wrap" id="pageContent"></section>
+</main>
+</div>
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+<div class="modal-head"><h2 id="modalTitle"></h2><button class="icon-btn" id="modalClose" type="button">×</button></div>
+<div id="modalBody"></div>
+</div>
+</div>
+<div class="toast-stack" id="toastStack"></div>
+<script src="config.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
